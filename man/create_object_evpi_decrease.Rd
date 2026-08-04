@@ -4,17 +4,22 @@
 \alias{create_object_evpi_decrease}
 \title{Create an object evpi_decrease}
 \usage{
-create_object_evpi_decrease(object_inmb, object_pop, object_var_inmb,
-  step_exp = 1, step_ref = 1)
+create_object_evpi_decrease(
+  object_inmb,
+  object_pop,
+  object_var_inmb,
+  step_exp = 1,
+  step_ref = 1
+)
 }
 \arguments{
-\item{object_inmb}{: an object that represents the INMB (Incremental Net Monetary Benefit)
+\item{object_inmb}{An object that represents the INMB (Incremental Net Monetary Benefit)
 Create an object with one of these functions : \link{create_object_inmb_direct}, \link{create_object_inmb}}
 
-\item{object_pop}{: an object that represents the size of the targeted population.
+\item{object_pop}{An object that represents the size of the targeted population.
 Create an object with \link{create_object_pop}}
 
-\item{object_var_inmb}{: an object that represents the variance of INMB. The variance of INMB can be directly hypothesized,
+\item{object_var_inmb}{An object that represents the variance of INMB. The variance of INMB can be directly hypothesized,
 or calculated through sdc, sde, rho and lambda, or calculated through sdc_ref, sde_ref, sdc_exp, sde_exp, rho and lambda.
 Create an object with one of these functions : \link{create_object_var_inmb_direct}, \link{create_object_var_inmb},\link{create_object_var_inmb_diff}}
 
@@ -38,4 +43,3 @@ object_var_inmb <- create_object_var_inmb(sde=0.12, sdc=2100, rho=0.1, object_la
 object_pop <- create_object_pop(horizon = 20, discount=0.04, N_year = 52000)
 object_evpi_decrease <- create_object_evpi_decrease(object_inmb, object_pop, object_var_inmb)
 }
-

@@ -1,0 +1,608 @@
+<!DOCTYPE html>
+
+<html>
+
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+
+<meta name="author" content />
+
+<meta name="date" content="2026-07-24" />
+
+<title>Introduction to EBASS</title>
+
+<script>// Pandoc 2.9 adds attributes on both header and div. We remove the former (to
+// be compatible with the behavior of Pandoc < 2.8).
+document.addEventListener('DOMContentLoaded', function(e) {
+  var hs = document.querySelectorAll("div.section[class*='level'] > :first-child");
+  var i, h, a;
+  for (i = 0; i < hs.length; i++) {
+    h = hs[i];
+    if (!/^h[1-6]$/i.test(h.tagName)) continue;  // it should be a header h1-h6
+    a = h.attributes;
+    while (a.length > 0) h.removeAttribute(a[0].name);
+  }
+});
+</script>
+
+<style type="text/css">
+code{white-space: pre-wrap;}
+span.smallcaps{font-variant: small-caps;}
+span.underline{text-decoration: underline;}
+div.column{display: inline-block; vertical-align: top; width: 50%;}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+</style>
+
+
+
+<style type="text/css">
+code {
+white-space: pre;
+}
+.sourceCode {
+overflow: visible;
+}
+</style>
+<style type="text/css" data-origin="pandoc">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+{ counter-reset: source-line 0; }
+pre.numberSource code > span
+{ position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+{ content: counter(source-line);
+position: relative; left: -1em; text-align: right; vertical-align: baseline;
+border: none; display: inline-block;
+-webkit-touch-callout: none; -webkit-user-select: none;
+-khtml-user-select: none; -moz-user-select: none;
+-ms-user-select: none; user-select: none;
+padding: 0 4px; width: 4em;
+color: #aaaaaa;
+}
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa; padding-left: 4px; }
+div.sourceCode
+{ }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } 
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.at { color: #7d9029; } 
+code span.bn { color: #40a070; } 
+code span.bu { color: #008000; } 
+code span.cf { color: #007020; font-weight: bold; } 
+code span.ch { color: #4070a0; } 
+code span.cn { color: #880000; } 
+code span.co { color: #60a0b0; font-style: italic; } 
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.do { color: #ba2121; font-style: italic; } 
+code span.dt { color: #902000; } 
+code span.dv { color: #40a070; } 
+code span.er { color: #ff0000; font-weight: bold; } 
+code span.ex { } 
+code span.fl { color: #40a070; } 
+code span.fu { color: #06287e; } 
+code span.im { color: #008000; font-weight: bold; } 
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } 
+code span.kw { color: #007020; font-weight: bold; } 
+code span.op { color: #666666; } 
+code span.ot { color: #007020; } 
+code span.pp { color: #bc7a00; } 
+code span.sc { color: #4070a0; } 
+code span.ss { color: #bb6688; } 
+code span.st { color: #4070a0; } 
+code span.va { color: #19177c; } 
+code span.vs { color: #4070a0; } 
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } 
+</style>
+<script>
+// apply pandoc div.sourceCode style to pre.sourceCode instead
+(function() {
+  var sheets = document.styleSheets;
+  for (var i = 0; i < sheets.length; i++) {
+    if (sheets[i].ownerNode.dataset["origin"] !== "pandoc") continue;
+    try { var rules = sheets[i].cssRules; } catch (e) { continue; }
+    var j = 0;
+    while (j < rules.length) {
+      var rule = rules[j];
+      // check if there is a div.sourceCode rule
+      if (rule.type !== rule.STYLE_RULE || rule.selectorText !== "div.sourceCode") {
+        j++;
+        continue;
+      }
+      var style = rule.style.cssText;
+      // check if color or background-color is set
+      if (rule.style.color === '' && rule.style.backgroundColor === '') {
+        j++;
+        continue;
+      }
+      // replace div.sourceCode by a pre.sourceCode rule
+      sheets[i].deleteRule(j);
+      sheets[i].insertRule('pre.sourceCode{' + style + '}', j);
+    }
+  }
+})();
+</script>
+
+
+
+
+<style type="text/css">body {
+background-color: #fff;
+margin: 1em auto;
+max-width: 700px;
+overflow: visible;
+padding-left: 2em;
+padding-right: 2em;
+font-family: "Open Sans", "Helvetica Neue", Helvetica, Arial, sans-serif;
+font-size: 14px;
+line-height: 1.35;
+}
+#TOC {
+clear: both;
+margin: 0 0 10px 10px;
+padding: 4px;
+width: 400px;
+border: 1px solid #CCCCCC;
+border-radius: 5px;
+background-color: #f6f6f6;
+font-size: 13px;
+line-height: 1.3;
+}
+#TOC .toctitle {
+font-weight: bold;
+font-size: 15px;
+margin-left: 5px;
+}
+#TOC ul {
+padding-left: 40px;
+margin-left: -1.5em;
+margin-top: 5px;
+margin-bottom: 5px;
+}
+#TOC ul ul {
+margin-left: -2em;
+}
+#TOC li {
+line-height: 16px;
+}
+table {
+margin: 1em auto;
+border-width: 1px;
+border-color: #DDDDDD;
+border-style: outset;
+border-collapse: collapse;
+}
+table th {
+border-width: 2px;
+padding: 5px;
+border-style: inset;
+}
+table td {
+border-width: 1px;
+border-style: inset;
+line-height: 18px;
+padding: 5px 5px;
+}
+table, table th, table td {
+border-left-style: none;
+border-right-style: none;
+}
+table thead, table tr.even {
+background-color: #f7f7f7;
+}
+p {
+margin: 0.5em 0;
+}
+blockquote {
+background-color: #f6f6f6;
+padding: 0.25em 0.75em;
+}
+hr {
+border-style: solid;
+border: none;
+border-top: 1px solid #777;
+margin: 28px 0;
+}
+dl {
+margin-left: 0;
+}
+dl dd {
+margin-bottom: 13px;
+margin-left: 13px;
+}
+dl dt {
+font-weight: bold;
+}
+ul {
+margin-top: 0;
+}
+ul li {
+list-style: circle outside;
+}
+ul ul {
+margin-bottom: 0;
+}
+pre, code {
+background-color: #f7f7f7;
+border-radius: 3px;
+color: #333;
+white-space: pre-wrap; 
+}
+pre {
+border-radius: 3px;
+margin: 5px 0px 10px 0px;
+padding: 10px;
+}
+pre:not([class]) {
+background-color: #f7f7f7;
+}
+code {
+font-family: Consolas, Monaco, 'Courier New', monospace;
+font-size: 85%;
+}
+p > code, li > code {
+padding: 2px 0px;
+}
+div.figure {
+text-align: center;
+}
+img {
+background-color: #FFFFFF;
+padding: 2px;
+border: 1px solid #DDDDDD;
+border-radius: 3px;
+border: 1px solid #CCCCCC;
+margin: 0 5px;
+}
+h1 {
+margin-top: 0;
+font-size: 35px;
+line-height: 40px;
+}
+h2 {
+border-bottom: 4px solid #f7f7f7;
+padding-top: 10px;
+padding-bottom: 2px;
+font-size: 145%;
+}
+h3 {
+border-bottom: 2px solid #f7f7f7;
+padding-top: 10px;
+font-size: 120%;
+}
+h4 {
+border-bottom: 1px solid #f7f7f7;
+margin-left: 8px;
+font-size: 105%;
+}
+h5, h6 {
+border-bottom: 1px solid #ccc;
+font-size: 105%;
+}
+a {
+color: #0033dd;
+text-decoration: none;
+}
+a:hover {
+color: #6666ff; }
+a:visited {
+color: #800080; }
+a:visited:hover {
+color: #BB00BB; }
+a[href^="http:"] {
+text-decoration: underline; }
+a[href^="https:"] {
+text-decoration: underline; }
+
+code > span.kw { color: #555; font-weight: bold; } 
+code > span.dt { color: #902000; } 
+code > span.dv { color: #40a070; } 
+code > span.bn { color: #d14; } 
+code > span.fl { color: #d14; } 
+code > span.ch { color: #d14; } 
+code > span.st { color: #d14; } 
+code > span.co { color: #888888; font-style: italic; } 
+code > span.ot { color: #007020; } 
+code > span.al { color: #ff0000; font-weight: bold; } 
+code > span.fu { color: #900; font-weight: bold; } 
+code > span.er { color: #a61717; background-color: #e3d2d2; } 
+</style>
+
+
+
+
+</head>
+
+<body>
+
+
+
+
+<h1 class="title toc-ignore">Introduction to EBASS</h1>
+<h4 class="author"></h4>
+<h4 class="date">2026-07-24</h4>
+
+
+<div id="TOC">
+<ul>
+<li><a href="#introduction" id="toc-introduction">Introduction</a></li>
+<li><a href="#example" id="toc-example">Example</a></li>
+</ul>
+</div>
+
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>The EBASS package provides functions to compute sample size
+calculation for cost-effectiveness studies.</p>
+<p>Our sample size calculation method uses a frequentist approach based
+on the expected value of perfect information (EVPI). The EVPI is an
+estimate of the cost of current uncertainty by accounting for both the
+probability that a decision based on existing evidence regarding the
+expected mean Incremental Net Monetary Benefit (INMB) is wrong
+(i.e:<span class="math inline">\(P(INMB\geq 0 \vee \mu_{inmb} &lt;
+0)\)</span> or <span class="math inline">\(P(INMB&lt;0 \vee \mu_{inmb}
+\geq 0)\)</span>) and for the magnitude of the consequences of making
+the wrong decision for the target population.</p>
+<p>The EVPI can be defined as the expected opportunity loss from a bad
+decision avoided with perfect information.</p>
+<p><span class="math display">\[ EVPI = N \Big[ I(\mu_{inmb} &gt; 0)
+\int_{-\infty}^{0} -bf(b)db + I(\mu_{inmb} \leq 0) \int_{0}^{+\infty}
+bf(b)db \Big] \]</span></p>
+<p>Where <span class="math inline">\(f\)</span> is the density function
+of INMB which follows a normal distribution <span class="math inline">\(\mathcal{N} (\mu_{inmb},
+\sigma^2_{inmb})\)</span>, <span class="math inline">\(N\)</span> is the
+sample size of the target population and <span class="math inline">\(I\)</span> is an indicator function.</p>
+<p>The EVPI can then be used as a necessary requirement for determining
+the profitability of further research. Applying this decision rule,
+additional research should be considered only if the EVPI exceeds the
+cost of further research.</p>
+<p>It is this decision rule, based both on the EVPI and the cost of
+research, that we use for determining the optimal sample size of a
+cost-effectiveness study. Our method is applicable to all
+cost-effectiveness studies comparing two independent groups.</p>
+</div>
+<div id="example" class="section level2">
+<h2>Example</h2>
+<p>This example shows how was calculated the optimal sample size for a
+randomized trial-based cost-effectiveness analyses (CEA). The study
+objective was to compare telemedicine to face to face care in elderly
+patients with complicated chronic wounds in nursing homes. First,
+hypothesis are made for the incremental net monetary benefit (INMB), its
+variance, the size of the target population and the cost of inclusion of
+an additional participant. Then, sample size based on the EVPI is
+calculated. Each step for sample size calculation is explained in the
+sections below.</p>
+<div id="lambda" class="section level3">
+<h3>Lambda</h3>
+<p>Lambda is known as the willingness to pay. That is the ceiling
+cost-effectiveness ratio or the maximum acceptable cost of a unit of
+effectiveness. In this example, the lambda value is set to 20 000 euros
+per QALY.</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="#cb1-1" tabindex="-1"></a><span class="fu">library</span>(EBASS)</span>
+<span id="cb1-2"><a href="#cb1-2" tabindex="-1"></a>object_lambda <span class="ot">&lt;-</span> <span class="fu">create_object_lambda</span> (<span class="dv">20000</span>)</span></code></pre></div>
+</div>
+<div id="inmb-estimate" class="section level3">
+<h3>INMB estimate</h3>
+<p>The net monetary benefit (NMB) of an intervention is given by <span class="math inline">\(E \times lambda - C\)</span> where E and C are the
+effectiveness and cost of this intervention. When the NMB is positive,
+the value of the intervention’s effectiveness overpasses its cost. When
+evaluating the cost-effectiveness of a new intervention in comparison
+with the reference, one can estimate the difference of NMB between the
+new (or experimental) intervention and the reference intervention. This
+difference is known as the incremental net monetary benefit (INMB),
+which is given by: <span class="math inline">\(INMB = NMBexp - NMBref =
+de \times lambda - dc\)</span>. In this example, the difference of
+effectiveness (de) between telemedicine and face to face is expected to
+be 0.04 QALY and the difference of cost (dc) to be -168 euros.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="#cb2-1" tabindex="-1"></a>object_inmb <span class="ot">&lt;-</span> <span class="fu">create_object_inmb</span>(<span class="at">de =</span> <span class="fl">0.04</span>, <span class="at">dc=</span><span class="sc">-</span><span class="dv">168</span>, <span class="at">object_lambda =</span> object_lambda)</span>
+<span id="cb2-2"><a href="#cb2-2" tabindex="-1"></a>object_inmb<span class="sc">$</span><span class="fu">get_inmb</span>()</span></code></pre></div>
+<p>[1] 968</p>
+<p>Given these elements, the expected INMB in the example is 968 euros.
+Without these elements, it is also possible to make an hypothesis on the
+value of the INMB with the ‘create_object_inmb_direct’ function :</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="#cb3-1" tabindex="-1"></a>object_inmb_direct <span class="ot">&lt;-</span> <span class="fu">create_object_inmb_direct</span>(<span class="at">inmb =</span> <span class="dv">968</span>)</span></code></pre></div>
+</div>
+<div id="inmb-variance" class="section level3">
+<h3>INMB variance</h3>
+<p>If data are available this variance can be calculated based of the
+common standard deviation of costs (<span class="math inline">\(\sigma_c\)</span>), the common standard deviation
+of effectiveness (<span class="math inline">\(\sigma_e\)</span>), the
+willingness to pay lambda and the coefficient of correlation (<span class="math inline">\(\rho\)</span>) between the difference in costs
+(dc) and the difference in effectiveness (de) :</p>
+<p><span class="math display">\[ \sigma_{inmb} = 2 \times (\lambda^2
+\sigma_e^2 + \sigma_c^2 - 2 \lambda \rho \sigma_e^2
+\sigma_c^2)\]</span></p>
+<p>In this example, the common standard deviation of costs is 2100
+euros, the common standard deviation of effectiveness is 0.12 QALY and
+the coefficient of correlation is 0.1</p>
+<div class="sourceCode" id="cb4"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb4-1"><a href="#cb4-1" tabindex="-1"></a>object_var_inmb <span class="ot">&lt;-</span> <span class="fu">create_object_var_inmb</span>(<span class="at">sde=</span><span class="fl">0.12</span>, <span class="at">sdc=</span><span class="dv">2100</span>, <span class="at">rho=</span><span class="fl">0.1</span>, <span class="at">object_lambda=</span>object_lambda)</span>
+<span id="cb4-2"><a href="#cb4-2" tabindex="-1"></a>object_var_inmb<span class="sc">$</span><span class="fu">get_var_inmb</span>()</span></code></pre></div>
+<p>[1] 18324000</p>
+<p>When absolutely no data regarding the variability of costs and
+effectiveness are available, it is possible to provide a value for the
+variance of the Incremental Net Monetary Benefit by using the
+“create_object_var_inmb_direct” function. If the standard deviation of
+costs and effectiveness differ in each group, one can use the
+“create_object_var_inmb_diff” function.</p>
+<p>Note that both INMB and its variance use the lambda value in their
+formula. Modifying the lambda value will affect both. That’s why the
+lambda value was set in its own object and passed by arguments to
+‘create_object_inmb’ and ‘create_object_var_inmb’ functions.</p>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="#cb5-1" tabindex="-1"></a><span class="co"># Modify the lambda value</span></span>
+<span id="cb5-2"><a href="#cb5-2" tabindex="-1"></a>object_lambda<span class="sc">$</span><span class="fu">set_lambda</span>(<span class="dv">10000</span>)</span>
+<span id="cb5-3"><a href="#cb5-3" tabindex="-1"></a><span class="co"># See that inmb and var_inmb were affected by this modification :</span></span>
+<span id="cb5-4"><a href="#cb5-4" tabindex="-1"></a><span class="fu">cat</span> (<span class="st">&quot;The new INMB value is :&quot;</span>,object_inmb<span class="sc">$</span><span class="fu">get_inmb</span>(), <span class="st">&quot;and its variance :&quot;</span>,  </span>
+<span id="cb5-5"><a href="#cb5-5" tabindex="-1"></a>     object_var_inmb<span class="sc">$</span><span class="fu">get_var_inmb</span>())</span></code></pre></div>
+<p>The new INMB value is : 568 and its variance : 10692000</p>
+<div class="sourceCode" id="cb6"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb6-1"><a href="#cb6-1" tabindex="-1"></a><span class="co"># reset the value to 20 000</span></span>
+<span id="cb6-2"><a href="#cb6-2" tabindex="-1"></a>object_lambda<span class="sc">$</span><span class="fu">set_lambda</span>(<span class="dv">20000</span>)</span></code></pre></div>
+</div>
+<div id="target-population" class="section level3">
+<h3>Target population</h3>
+<p>The expected value of perfect information (EVPI) is estimated for the
+entire population targeted by the evaluated intervention. The size of
+the target population (POP) can be estimated through prevalence and
+incidence data from registries, large cohort studies,
+medico-administrative databases, or surveillance systems. It is usually
+easier to gather data on the annual number of individual susceptible to
+benefit for the new intervention. If the time horizon is longer than one
+year, POP has to be discounted. In this example, 52 000 persons can
+benefit from the new experimental intervention each year during 20
+years. The annual discount rate in France is 4%.</p>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="#cb7-1" tabindex="-1"></a>object_pop <span class="ot">&lt;-</span> <span class="fu">create_object_pop</span>(<span class="at">horizon =</span> <span class="dv">20</span>, <span class="at">discount=</span><span class="fl">0.04</span>, <span class="at">N_year =</span> <span class="dv">52000</span>)</span></code></pre></div>
+</div>
+<div id="evpi-decrease" class="section level3">
+<h3>EVPI decrease</h3>
+<p>Given three objects created above : object_pop, object_inmb and
+object_var_inmb, it’s now possible to calculate the expected value of
+perfect information that will remain after the inclusion of n
+participants in the study. For example, for 300 and 302 participants
+:</p>
+<div class="sourceCode" id="cb8"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb8-1"><a href="#cb8-1" tabindex="-1"></a>object_evpi_decrease <span class="ot">&lt;-</span> <span class="fu">create_object_evpi_decrease</span>(object_inmb, object_pop, object_var_inmb)</span>
+<span id="cb8-2"><a href="#cb8-2" tabindex="-1"></a><span class="co"># As the allocation ratio is 1:1, setting a number of 150 participants </span></span>
+<span id="cb8-3"><a href="#cb8-3" tabindex="-1"></a><span class="co"># in the experimental group means we will have the same number in the reference group</span></span>
+<span id="cb8-4"><a href="#cb8-4" tabindex="-1"></a><span class="fu">cat</span> (<span class="st">&quot;EVPI remaining after the inclusion of 300 participants : &quot;</span>,</span>
+<span id="cb8-5"><a href="#cb8-5" tabindex="-1"></a>     object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">150</span>), <span class="st">&quot;</span><span class="sc">\n</span><span class="st">&quot;</span>,</span>
+<span id="cb8-6"><a href="#cb8-6" tabindex="-1"></a>     <span class="st">&quot;EVPI remaining after the inclusion of 302 participants : &quot;</span>,</span>
+<span id="cb8-7"><a href="#cb8-7" tabindex="-1"></a>     object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">151</span>))</span></code></pre></div>
+<p>EVPI remaining after the inclusion of 300 participants : 216457 EVPI
+remaining after the inclusion of 302 participants : 209209.2</p>
+<p>The more individuals are included, the less EVPI will remain at the
+end of the study. <span class="math inline">\(EVPI(n)\)</span> is a
+decreasing function and the EVPI decrement can be calculated as follows
+: <span class="math inline">\(EVPI_n - EVPI_{n+STEPn}\)</span> where
+<span class="math inline">\(STEP_n\)</span> is the incremental step of n
+: <span class="math inline">\(STEP_n = STEP_{ref} + STEP_{exp}\)</span>.
+The minimal numbers of patients to be included in the reference group
+(<span class="math inline">\(STEP_{ref}\)</span>) and in the
+experimental group (<span class="math inline">\(STEP_{exp}\)</span>) are
+arguments of the ‘create_object_evpi_decrease’ function and are set to 1
+by default in ordrer to respect the allocation balance.</p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="#cb9-1" tabindex="-1"></a><span class="co"># EVPI_300 - EVPI_302</span></span>
+<span id="cb9-2"><a href="#cb9-2" tabindex="-1"></a><span class="fu">cat</span> (<span class="st">&quot;EVPI decrement between the inclusion of 302 and 300 participants :  &quot;</span>,</span>
+<span id="cb9-3"><a href="#cb9-3" tabindex="-1"></a>     object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">150</span>) <span class="sc">-</span> object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">151</span>))</span></code></pre></div>
+<p>EVPI decrement between the inclusion of 302 and 300 participants :
+7247.758 7247.76 euros is the value of the information gained throught
+the inclusion of 2 additional participants in the study (participants
+number 301 and 302). As the cost of inclusion in this study is constant
+and worths 2257.25 euros, the value of information gained through the
+inclusion of individuals 301 and 302 is higher than the cost of their
+inclusion.</p>
+<div class="sourceCode" id="cb10"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb10-1"><a href="#cb10-1" tabindex="-1"></a><span class="fu">cat</span>((object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">150</span>) <span class="sc">-</span> object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">151</span>)) <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> <span class="fl">2257.25</span>)</span></code></pre></div>
+<p>2733.258</p>
+</div>
+<div id="sample-size" class="section level3">
+<h3>Sample size</h3>
+<p>The optimal sample size of our planned cost-effectiveness study is
+the smallest n for which the information gained through the inclusion of
+additional individuals (the decrease in the EVPI) is lower than or
+equals the cost of their inclusion. Formally, no more participants
+should be included when <span class="math inline">\(EVPI_n -
+EVPI_{n+STEPn} \leq STEP_{n} \times cost_{indiv}\)</span> or <span class="math inline">\(EVPI_n - EVPI_{n+STEPn} - STEP_{n} \times
+cost_{indiv} \leq 0\)</span> where <span class="math inline">\(cost_{indiv}\)</span> is the cost of including an
+additional participant. The function ‘sample_size’ determines the
+optimal sample size based on this equation :</p>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="#cb11-1" tabindex="-1"></a>cost_indiv <span class="ot">&lt;-</span> <span class="fl">2257.25</span></span>
+<span id="cb11-2"><a href="#cb11-2" tabindex="-1"></a>n_subject <span class="ot">&lt;-</span> <span class="fu">sample_size</span>(<span class="at">object_evpi_decrease =</span> object_evpi_decrease, <span class="at">cost_indiv =</span>  cost_indiv)</span></code></pre></div>
+<p>Indeed, the difference between information gained and costs of
+inclusion is still positive for participants 327 and 328 but turns
+negative from participant 329. The function ‘graph_gain_n’ produces a
+plot to explain this.</p>
+<div class="sourceCode" id="cb12"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb12-1"><a href="#cb12-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;difference between information gain and inclusion costs for participants 327 and 328 :&quot;</span>,</span>
+<span id="cb12-2"><a href="#cb12-2" tabindex="-1"></a>(object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">163</span>) <span class="sc">-</span> object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">164</span>)) <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> cost_indiv)</span></code></pre></div>
+<p>difference between information gain and inclusion costs for
+participants 327 and 328 : 76.17842</p>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="#cb13-1" tabindex="-1"></a><span class="fu">cat</span>(<span class="st">&quot;difference between information gain and inclusion costs for participants 329 and 330 :&quot;</span>,</span>
+<span id="cb13-2"><a href="#cb13-2" tabindex="-1"></a>(object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">164</span>) <span class="sc">-</span> object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">165</span>)) <span class="sc">-</span> <span class="dv">2</span> <span class="sc">*</span> cost_indiv)</span></code></pre></div>
+<p>difference between information gain and inclusion costs for
+participants 329 and 330 : -80.45154</p>
+<div class="sourceCode" id="cb14"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb14-1"><a href="#cb14-1" tabindex="-1"></a><span class="fu">graph_gain_n</span>(object_evpi_decrease, cost_indiv)</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="gamma-risk" class="section level3">
+<h3>gamma risk</h3>
+<p>The gamma risk is the probability that a decision based on the
+expected mean of the Incremental Net Monetary Benefit (INMB) is wrong.
+After the inclusion of 328 participants :</p>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="#cb15-1" tabindex="-1"></a>object_evpi_decrease<span class="sc">$</span><span class="fu">set_N_exp</span>(<span class="dv">164</span>)</span>
+<span id="cb15-2"><a href="#cb15-2" tabindex="-1"></a><span class="fu">gamma_risk</span>(<span class="at">object_evpi_decrease =</span> object_evpi_decrease)</span></code></pre></div>
+<p>[1] 0.001890221</p>
+</div>
+<div id="simulation" class="section level3">
+<h3>Simulation</h3>
+<p>What if we want to calculate the sample size for different hypothesis
+for time horizon for example ? Each object has setter functions to
+modify the hypothesis.</p>
+<div class="sourceCode" id="cb16"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb16-1"><a href="#cb16-1" tabindex="-1"></a><span class="co"># calculate samples size for time horizon between 1 and 20 years</span></span>
+<span id="cb16-2"><a href="#cb16-2" tabindex="-1"></a>time_horizon <span class="ot">&lt;-</span> <span class="fu">seq</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>)</span>
+<span id="cb16-3"><a href="#cb16-3" tabindex="-1"></a>Nindividuals <span class="ot">&lt;-</span> <span class="fu">sapply</span>(time_horizon, <span class="cf">function</span>(x){</span>
+<span id="cb16-4"><a href="#cb16-4" tabindex="-1"></a>  object_pop<span class="sc">$</span><span class="fu">set_horizon</span>(x)</span>
+<span id="cb16-5"><a href="#cb16-5" tabindex="-1"></a>  <span class="fu">return</span> (<span class="fu">sample_size</span>(object_evpi_decrease, cost_indiv)<span class="sc">$</span>N)</span>
+<span id="cb16-6"><a href="#cb16-6" tabindex="-1"></a>})</span>
+<span id="cb16-7"><a href="#cb16-7" tabindex="-1"></a><span class="co"># plot the result</span></span>
+<span id="cb16-8"><a href="#cb16-8" tabindex="-1"></a><span class="fu">plot</span>(time_horizon, Nindividuals, <span class="at">xlab=</span><span class="st">&quot;Time horizon in years&quot;</span>,</span>
+<span id="cb16-9"><a href="#cb16-9" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Number of individuals to include in the study&quot;</span>,<span class="at">xaxt=</span><span class="st">&quot;n&quot;</span>, <span class="at">type=</span><span class="st">&quot;b&quot;</span>, <span class="at">pch=</span><span class="dv">20</span>)</span>
+<span id="cb16-10"><a href="#cb16-10" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side=</span><span class="dv">1</span>, <span class="at">at=</span>time_horizon, <span class="at">labels=</span><span class="fu">as.character</span>(time_horizon))</span></code></pre></div>
+<p><img src="data:image/png;base64,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" /><!-- --></p>
+</div>
+<div id="code-summary" class="section level3">
+<h3>Code summary</h3>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="#cb17-1" tabindex="-1"></a><span class="co"># results hidden</span></span>
+<span id="cb17-2"><a href="#cb17-2" tabindex="-1"></a><span class="fu">library</span>(EBASS)</span>
+<span id="cb17-3"><a href="#cb17-3" tabindex="-1"></a>object_lambda <span class="ot">&lt;-</span> <span class="fu">create_object_lambda</span> (<span class="dv">20000</span>)</span>
+<span id="cb17-4"><a href="#cb17-4" tabindex="-1"></a>object_inmb <span class="ot">&lt;-</span> <span class="fu">create_object_inmb</span>(<span class="at">de =</span> <span class="fl">0.04</span>, <span class="at">dc=</span><span class="sc">-</span><span class="dv">168</span>, <span class="at">object_lambda =</span> object_lambda)</span>
+<span id="cb17-5"><a href="#cb17-5" tabindex="-1"></a>object_var_inmb <span class="ot">&lt;-</span> <span class="fu">create_object_var_inmb</span>(<span class="at">sde=</span><span class="fl">0.12</span>, <span class="at">sdc=</span><span class="dv">2100</span>, <span class="at">rho=</span><span class="fl">0.1</span>, <span class="at">object_lambda=</span>object_lambda)</span>
+<span id="cb17-6"><a href="#cb17-6" tabindex="-1"></a>object_pop <span class="ot">&lt;-</span> <span class="fu">create_object_pop</span>(<span class="at">horizon =</span> <span class="dv">20</span>, <span class="at">discount=</span><span class="fl">0.04</span>, <span class="at">N_year =</span> <span class="dv">52000</span>)</span>
+<span id="cb17-7"><a href="#cb17-7" tabindex="-1"></a>object_evpi_decrease <span class="ot">&lt;-</span> <span class="fu">create_object_evpi_decrease</span>(object_inmb, object_pop, object_var_inmb)</span>
+<span id="cb17-8"><a href="#cb17-8" tabindex="-1"></a>cost_indiv <span class="ot">&lt;-</span> <span class="fl">2257.25</span></span>
+<span id="cb17-9"><a href="#cb17-9" tabindex="-1"></a>n_subject <span class="ot">&lt;-</span> <span class="fu">sample_size</span> (object_evpi_decrease, cost_indiv)</span>
+<span id="cb17-10"><a href="#cb17-10" tabindex="-1"></a><span class="fu">graph_gain_n</span> (object_evpi_decrease, cost_indiv)</span>
+<span id="cb17-11"><a href="#cb17-11" tabindex="-1"></a><span class="fu">gamma_risk</span> (object_evpi_decrease)</span>
+<span id="cb17-12"><a href="#cb17-12" tabindex="-1"></a>time_horizon <span class="ot">&lt;-</span> <span class="fu">seq</span> (<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>)</span>
+<span id="cb17-13"><a href="#cb17-13" tabindex="-1"></a>Nindividuals <span class="ot">&lt;-</span> <span class="fu">sapply</span>(time_horizon, <span class="cf">function</span>(x){</span>
+<span id="cb17-14"><a href="#cb17-14" tabindex="-1"></a>  object_pop<span class="sc">$</span><span class="fu">set_horizon</span>(x)</span>
+<span id="cb17-15"><a href="#cb17-15" tabindex="-1"></a>  <span class="fu">return</span> (<span class="fu">sample_size</span>(object_evpi_decrease, cost_indiv)<span class="sc">$</span>N)</span>
+<span id="cb17-16"><a href="#cb17-16" tabindex="-1"></a>})</span>
+<span id="cb17-17"><a href="#cb17-17" tabindex="-1"></a><span class="fu">plot</span>(time_horizon, Nindividuals, <span class="at">xlab=</span><span class="st">&quot;Time horizon in years&quot;</span>,</span>
+<span id="cb17-18"><a href="#cb17-18" tabindex="-1"></a>     <span class="at">ylab=</span><span class="st">&quot;Number of individuals to include in the study&quot;</span>,<span class="at">xaxt=</span><span class="st">&quot;n&quot;</span>, <span class="at">type=</span><span class="st">&quot;b&quot;</span>, <span class="at">pch=</span><span class="dv">20</span>)</span>
+<span id="cb17-19"><a href="#cb17-19" tabindex="-1"></a><span class="fu">axis</span>(<span class="at">side=</span><span class="dv">1</span>, <span class="at">at=</span>time_horizon, <span class="at">labels=</span><span class="fu">as.character</span>(time_horizon))</span></code></pre></div>
+</div>
+</div>
+
+
+
+<!-- code folding -->
+
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
