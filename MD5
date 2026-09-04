@@ -1,6 +1,6 @@
-62adba210404c888b4eab1572617b67b *DESCRIPTION
+025132c61d85fc3a177cca89321373c0 *DESCRIPTION
 837c19eb235b591bc26f270fc02da219 *NAMESPACE
-fcdb9319da127d26c772318fb48c4140 *NEWS.md
+38296aec258e3be1463e6ebeb9e58da4 *NEWS.md
 c3d7307fcd7968fe4f9ee4e57365313d *R/EVPI.R
 38762ef9bb0ef6e6d66f3602234bc12b *R/INMB.R
 91c80bac767cf9debe239aca2d33f30f *R/INMB_DIRECT.R
@@ -12,10 +12,10 @@ b451503f332faaefcb780150a957cc79 *R/VAR_INMB_DIRECT.R
 d588bfb48a3b37cc7e2a86cb1669af00 *R/fonctions_sujets.R
 26c8edc405c1d09ed700b2fb730296b5 *R/internal.R
 698887fbc8b2a5176ad6e9b52c1cfc73 *README.md
-09107ec8105474da2f20a15d95b662c9 *build/vignette.rds
+4cefe98b5faeb33a05d37ee298eb7738 *build/vignette.rds
 d24975dc8fd1147ae345c15236ad2f54 *inst/doc/my-vignette.R
 dbe078264591b44bf7f0baa2dc800234 *inst/doc/my-vignette.Rmd
-d5b491ed2e33d572e4e8df97c25cada3 *inst/doc/my-vignette.html
+e31d3b6295561597770a8f87aa855a64 *inst/doc/my-vignette.html
 f4f122e712e39fa9cdd8793e5bf63be7 *man/EBASS-internal.Rd
 35a09a5e4d591b3a23a92370b4c65dbc *man/EVPI_DECREASE.Rd
 d2c7383153f1ec629e1b338621dec2a3 *man/INMB.Rd
